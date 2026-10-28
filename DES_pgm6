@@ -1,0 +1,33 @@
+LAB 6: WRITE A JAVA PROGRAM TO IMPLEMENT DES ALGORITHM LOGIC
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import java.util.Base64;
+import java.util.Scanner;
+public class DESWithUserKey {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Plaintext: ");
+        String plainText = sc.nextLine();
+        System.out.print("Enter Key (must be 8 chars e.g. 12345678): ");
+        String keyInput = sc.nextLine();
+        // 1. Make key from user input string
+        DESKeySpec desKeySpec = new DESKeySpec(keyInput.getBytes());
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+        SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+        // 2. Encrypt
+        Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+        String encryptedText = 
+Base64.getEncoder().encodeToString(encryptedBytes);
+        System.out.println("Encrypted: " + encryptedText);
+        // 3. Decrypt
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] decryptedBytes = 
+cipher.doFinal(Base64.getDecoder().decode(encryptedText));
+        String decryptedText = new String(decryptedBytes);
+        System.out.println("Decrypted: " + decryptedText);
+    }
+}

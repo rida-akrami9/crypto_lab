@@ -1,0 +1,55 @@
+LAB 3 (b): WRITE A JAVA PROGRAM TO PERFORM ENCRYPTION AND 
+DECRYPTION USING THE SUBSTITUTION CIPHER
+import java.util.Scanner;
+public class SubstitutionCipher {
+    // Standard alphabet
+    static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // Substitution key - Must be 26 unique letters
+    static final String KEY = "QWERTYUIOPASDFGHJKLZXCVBNM";
+  
+    public static String encrypt(String plainText) {
+        plainText = plainText.toUpperCase();
+        StringBuilder cipherText = new StringBuilder();
+        for (int i = 0; i < plainText.length(); i++) {
+            char c = plainText.charAt(i);
+            if (Character.isLetter(c)) {
+                int index = ALPHABET.indexOf(c);
+                char encryptedChar = KEY.charAt(index);
+                cipherText.append(encryptedChar);
+            } else {
+                // Keep spaces and symbols as it is
+                cipherText.append(c);
+            }
+        }
+        return cipherText.toString();
+    }
+    // Decryption function
+    public static String decrypt(String cipherText) {
+        cipherText = cipherText.toUpperCase();
+        StringBuilder plainText = new StringBuilder();
+        for (int i = 0; i < cipherText.length(); i++) {
+            char c = cipherText.charAt(i);
+            if (Character.isLetter(c)) {
+                int index = KEY.indexOf(c);
+                char decryptedChar = ALPHABET.charAt(index);
+                plainText.append(decryptedChar);
+            } else {
+                plainText.append(c);
+            }
+        }
+        return plainText.toString();
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("--- Substitution Cipher ---");
+        System.out.println("Alphabet : " + ALPHABET);
+        System.out.println("Key      : " + KEY);
+        System.out.print("\nEnter Plain Text: ");
+        String plain = sc.nextLine();
+        String encrypted = encrypt(plain);
+        System.out.println("Encrypted Text: " + encrypted);
+        String decrypted = decrypt(encrypted);
+        System.out.println("Decrypted Text: " + decrypted);
+        sc.close();
+    }
+}
